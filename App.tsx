@@ -35,19 +35,22 @@ const App: React.FC = () => {
   const downloadCSV = useCallback(() => {
     if (transactions.length === 0) return;
 
+    // Requirement update: The user explicitly requested to reverse the extracted order 
+    // (reversing the order found in the image), instead of sorting by date.
+    const sortedTransactions = [...transactions].reverse();
+
     // Header per requirement: Date; Income (+); Expense (-); Description
     // Requirement says: "15/12/2025; 退款(+的數字; 消費(-的數字); 交易說明"
-    // So columns are: Date, Refund, Expense, Description
+    // Expense column should not have negative sign.
     const header = "日期;退款(+);消費(-);交易說明";
     
-    const rows = transactions.map(t => {
+    const rows = sortedTransactions.map(t => {
       // Logic: 
-      // If income: put amount in Refund col, leave Expense col empty (or 0).
-      // If expense: leave Refund col empty, put negative amount in Expense col.
-      // Delimiter is semi-colon ';'.
+      // If income: put amount in Refund col.
+      // If expense: put absolute amount in Expense col (no negative sign).
       
       const refundVal = t.type === TransactionType.INCOME ? `+${t.amount}` : '';
-      const expenseVal = t.type === TransactionType.EXPENSE ? `-${t.amount}` : '';
+      const expenseVal = t.type === TransactionType.EXPENSE ? `${t.amount}` : '';
       
       // Sanitize description to prevent CSV breakage (remove semicolons or newlines)
       const safeDesc = t.description.replace(/;/g, ',').replace(/\n/g, ' ');
