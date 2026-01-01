@@ -1,0 +1,5 @@
+{
+  "name": "Smart Ledger OCR",
+  "description": "Upload receipt or statement images to automatically extract transaction details (Date, Description, Amount) using Gemini AI and export to formatted CSV.",
+  "requestFramePermissions": []
+}
