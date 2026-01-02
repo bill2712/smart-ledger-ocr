@@ -50,7 +50,7 @@ const App: React.FC = () => {
       // If expense: put absolute amount in Expense col (no negative sign).
       
       const refundVal = t.type === TransactionType.INCOME ? `+${t.amount}` : '';
-      const expenseVal = t.type === TransactionType.EXPENSE ? `${t.amount}` : '';
+      const expenseVal = t.type === TransactionType.EXPENSE ? `-${t.amount}` : '';
       
       // Sanitize description to prevent CSV breakage (remove semicolons or newlines)
       const safeDesc = t.description.replace(/;/g, ',').replace(/\n/g, ' ');
